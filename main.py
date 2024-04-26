@@ -1,52 +1,68 @@
 from flask import Flask, request
 import sqlite3
 import requests
-import json
 
 # Create a Flask Instance
 app = Flask(__name__)
 
 # Connect to database
-
 con = sqlite3.connect('plants.db', check_same_thread=False)
 cursor = con.cursor()
-# url till hela listan
-# url = "https://perenual.com/api/species-list?key=sk-FfKw662a5376cb5285251"
-# förkortad url för details
+con.row_factory = sqlite3.Row
+
+# Förkortad url för details
 url1 = "https://perenual.com/api/species/details/"
-# Hemlig API nyckel till perenual
-api_key = '?key=sk-FfKw662a5376cb5285251'
 
+filename = 'apikey'
 
+def get_file_contents(filename):
+    """ Given a filename,
+        return the contents of that file
+    """
+    try:
+        with open(filename, 'r') as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        print("'%s' file not found" % filename)
+    
+api_key = get_file_contents(filename)
 
 @app.route('/')
 def home():
 
     return ' navigate to en annan sida'
 
-@app.route('/seeds')
-def items():
-    # return list of seeds
-    # api listan = https://perenual.com/api/species-list?key=sk-FfKw662a5376cb5285251
-    return cursor.execute('SELECT * FROM seeds').fetchall()
+@app.route('/seeds', methods=['GET'])
+def seeds():
+    # Returns a list of our seeds
+    # return cursor.execute('SELECT * FROM seeds').fetchall()
+    # if request.method == 'GET':
+    #     response = cursor.execute('SELECT * FROM seeds')
+    #     unpacked = [{k: seed[k] for k in seed.keys()} for seed in response.fetchall()]
+    #     return '{"Seeds":' + str(unpacked).replace("'", '"') + '}'
+    return 'lista med seeds'
 
-# Nu hämtar den id nr från adressen och gör om den till plant_id för att passa in i url adressen. Tyvärr hämtar den inte från DB, men det funkar
-@app.route('/seeds/<ID>', methods=['GET'])
-def seed(ID):
+
+# Route and function for listing specific plants by their id.
+@app.route('/seeds/<id>', methods=['GET', 'DELETE'])
+def seed_detail(id):
     if request.method == 'GET':
-        # kod från Jimmy
-        # github_user = cursor.execute('SELECT name FROM seeds WHERE ID =' + str(ID)).fetchall()[0][0]
-        # user_details = requests.get(url1 + github_user)
+        # Get data from database
+        plant_id = cursor.execute('SELECT p_id FROM seeds WHERE id =' + str(id)).fetchall()[0][0]
 
-        # Kod från api sidan
-        payload = {}
-        headers = {}
-        plant_id = ID
-
-        response = requests.request("GET", url1 + plant_id + api_key,  headers=headers, data=payload)
+        # Get data from API 
+        response = requests.request("GET", url1 + str(plant_id) + api_key)
 
         print(response)
         return str(response.text)
+    elif request.method == 'DELETE':
+        response = cursor.execute('DELETE FROM seeds WHERE id=' + str(id))
+        con.commit()
+        if (response.rowcount > 0):
+            return 'Deleted', 200
+        else:
+            return 'Could not delete', 404
+
 
 # @app.route('/docs')
 # def home():
