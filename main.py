@@ -29,8 +29,7 @@ api_key = get_file_contents(filename)
 
 @app.route('/')
 def home():
-
-    return ' navigate to en annan sida'
+    return 'Welcome to this API'
 
 @app.route('/seeds', methods=['GET'])
 def seeds():
@@ -64,8 +63,9 @@ def seed_detail(id):
             return 'Could not delete', 404
 
 
-# @app.route('/docs')
-# def home():
+@app.route('/api/docs')
+def documentation():
+    return open('docs/docs.yaml')
 
 
 if __name__ == '__main__':
