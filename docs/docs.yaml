@@ -1,1 +1,30 @@
-Documentation for API
+openapi: 3.0.0
+info:
+  title: Case Fröer
+  version: 1.0.0
+  contact:
+    name: 'Fatima och Emelie'
+paths:
+  /seeds:
+    get:
+      summary: Return all seeds from the database
+      responses:
+        '200':
+          description: A list of seeds
+        '204':
+          description: A empty list
+        '400':
+          description: Could not implement your request
+  /seeds/id:
+    get:
+      summary: Return information for a specific seed with a id
+      responses:
+        '200':
+          description: A description of a specific seed
+    delete:
+      summary: Delete a seed from the database
+      responses:
+        '200':
+          description: Deleted
+        '404':
+          description: Could not delete

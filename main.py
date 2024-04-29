@@ -41,7 +41,7 @@ def seeds():
         unpacked = [dict(zip(columns, row)) for row in response.fetchall()]
         if (response.rowcount == 0): 
             return 'List is empty', 204
-        return jsonify({"Seeds": unpacked})
+        return jsonify({"Seeds": unpacked}), 200
     else:
         return 'Could not implement your request', 400
 
@@ -57,7 +57,7 @@ def seed_detail(id):
 
         # Get data from API 
         response = requests.request("GET", url1 + str(plant_id) + api_key)
-        return jsonify(response.json())
+        return jsonify(response.json()), 200
     elif request.method == 'DELETE':
         response = cursor.execute('DELETE FROM seeds WHERE id=' + str(id))
         con.commit()
