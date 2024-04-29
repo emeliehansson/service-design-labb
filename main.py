@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import sqlite3
 import requests
 
@@ -35,11 +35,15 @@ def home():
 def seeds():
     # Returns a list of our seeds
     # return cursor.execute('SELECT * FROM seeds').fetchall()
-    # if request.method == 'GET':
-    #     response = cursor.execute('SELECT * FROM seeds')
-    #     unpacked = [{k: seed[k] for k in seed.keys()} for seed in response.fetchall()]
-    #     return '{"Seeds":' + str(unpacked).replace("'", '"') + '}'
-    return 'lista med seeds'
+    if request.method == 'GET':
+        response = cursor.execute('SELECT * FROM seeds')
+        columns = [column[0] for column in cursor.description]
+        unpacked = [dict(zip(columns, row)) for row in response.fetchall()]
+        if (response.rowcount == 0): 
+            return 'List is empty', 204
+        return jsonify({"Seeds": unpacked})
+    else:
+        return 'Could not implement your request', 400
 
 
 # Route and function for listing specific plants by their id.
@@ -48,12 +52,12 @@ def seed_detail(id):
     if request.method == 'GET':
         # Get data from database
         plant_id = cursor.execute('SELECT p_id FROM seeds WHERE id =' + str(id)).fetchall()[0][0]
+        # if plant_id == None:
+        #     return 'id does not exist'
 
         # Get data from API 
         response = requests.request("GET", url1 + str(plant_id) + api_key)
-
-        print(response)
-        return str(response.text)
+        return jsonify(response.json())
     elif request.method == 'DELETE':
         response = cursor.execute('DELETE FROM seeds WHERE id=' + str(id))
         con.commit()
