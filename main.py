@@ -31,10 +31,10 @@ api_key = get_file_contents(filename)
 def home():
     return 'Welcome to this API'
 
+# Route and function for listing all seeds from the database.
 @app.route('/seeds', methods=['GET'])
 def seeds():
     # Returns a list of our seeds
-    # return cursor.execute('SELECT * FROM seeds').fetchall()
     if request.method == 'GET':
         response = cursor.execute('SELECT * FROM seeds')
         columns = [column[0] for column in cursor.description]
