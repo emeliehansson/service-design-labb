@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Case Fröer
-  version: 1.0.0
+  title: Case Seeds
+  version: 2.0.0
   contact:
     name: 'Fatima och Emelie'
 paths:
@@ -15,16 +15,34 @@ paths:
           description: A empty list
         '400':
           description: Could not implement your request
-  /seeds/id:
+  /seeds/{id}:
     get:
       summary: Return information for a specific seed with a id
+      parameters:
+      - name: id
+        in: path
+        description: ID of seed to use
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
       responses:
         '200':
           description: A description of a specific seed
         '404':
-          descripton: ID does not exist
+          description: ID does not exist
     delete:
       summary: Delete a seed from the database
+      parameters:
+      - name: id
+        in: path
+        description: ID of seed to use
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
       responses:
         '200':
           description: Deleted
