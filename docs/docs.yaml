@@ -21,6 +21,8 @@ paths:
       responses:
         '200':
           description: A description of a specific seed
+        '404':
+          descripton: ID does not exist
     delete:
       summary: Delete a seed from the database
       responses:
