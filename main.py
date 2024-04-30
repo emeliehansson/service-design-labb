@@ -51,9 +51,11 @@ def seeds():
 def seed_detail(id):
     if request.method == 'GET':
         # Get data from database
-        plant_id = cursor.execute('SELECT p_id FROM seeds WHERE id =' + str(id)).fetchall()[0][0]
-        # if plant_id == None:
-        #     return 'id does not exist'
+        plant_id_row = cursor.execute('SELECT p_id FROM seeds WHERE id =' + str(id)).fetchone()
+        if plant_id_row == None:
+            return 'ID does not exist', 404
+        
+        plant_id = plant_id_row[0]
 
         # Get data from API 
         response = requests.request("GET", url1 + str(plant_id) + api_key)
