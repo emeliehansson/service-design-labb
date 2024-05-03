@@ -23,3 +23,21 @@ För att komma igång med projektet efter att man klonat från GitHub:
 8. För att komma till API dokumentationen, navigera till [http://127.0.0.1:5000/api/docs](http://127.0.0.1:5000/api/docs).
 
 Funktionen DELETE fungerar genom att använda Postman API Platform. 
+
+### Källor
+
+Kursmaterial.
+
+https://github.com/BerlinNatrolit/service-design-23
+
+https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursor-fetchone.html 
+
+https://pynative.com/python-cursor-fetchall-fetchmany-fetchone-to-read-rows-from-table/ 
+
+https://github.com/dylburger/reading-api-key-from-file/blob/master/Keeping%20API%20Keys%20Secret.ipynb 
+
+https://docs.python.org/3/tutorial/datastructures.html 
+
+https://spec.openapis.org/oas/latest.html#document-structure 
+
+https://github.com/OAI/OpenAPI-Specification/
